@@ -75,11 +75,11 @@ flowchart LR
 | Tarefa | Status |
 |--------|--------|
 | Setup do monorepo + docker-compose | ✅ |
-| Core Banking: Account & Transaction aggregates (DDD) | ⬜ |
-| Eventos de domínio: TransactionCreated, TransferCompleted | ⬜ |
-| RabbitMQ integration (publisher) | ⬜ |
+| Core Banking: Account & Transaction aggregates (DDD) | ✅ |
+| Eventos de domínio: TransactionCreated, TransferCompleted | ✅ |
+| RabbitMQ integration (publisher) | ✅ |
+| Testes de unidade e integração (xUnit) | ✅ |
 | API REST: criar conta, transferência, extrato | ⬜ |
-| Testes de unidade e integração (xUnit) | ⬜ |
 | Swagger/OpenAPI documentation | ⬜ |
 
 ### Sprint 2: Java + Angular + WebSocket

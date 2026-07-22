@@ -1,5 +1,6 @@
 using CoreBanking.Data;
 using CoreBanking.Domain.Transaction;
+using CoreBanking.Domain.Transaction.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoreBanking.Services;
@@ -7,11 +8,13 @@ namespace CoreBanking.Services;
 public class TransferService
 {
     private readonly AppDbContext _db;
+    private readonly IEventPublisher _eventPublisher;
 
     // DI: ASP.NET Core automatically injects AppDbContext
-    public TransferService(AppDbContext db)
+    public TransferService(AppDbContext db, IEventPublisher eventPublisher)
     {
         _db = db;
+        _eventPublisher = eventPublisher;
     }
 
     public async Task TransferAsync(
@@ -52,5 +55,15 @@ public class TransferService
         // 5. Save - this turns into ONE SQL transaction (ACID!)
         // If something fails, everything goes back (ROLLBACK)
         await _db.SaveChangesAsync();
+
+        // 6. Publish domain event to RabbitMQ asynchronously
+        var transferEvent = new TransferCompleted
+        {
+            FromAccountId = fromAccountId,
+            ToAccountId = toAccountId,
+            Amount = amount
+        };
+
+        await _eventPublisher.PublishAsync(transferEvent, routingKey: "transfer.completed");
     }
 }

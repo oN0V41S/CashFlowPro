@@ -28,6 +28,10 @@ builder.Services.AddSingleton<IModel>(sp =>
     return connection.CreateModel();
 });
 
+// Register the RabbitMQ Publisher
+builder.Services.AddSingleton<IEventPublisher, RabbitMQEventPublisher>();
+
+
 // ─── Services ───────────────────────────────────────────────
 builder.Services.AddScoped<TransferService>();
 
