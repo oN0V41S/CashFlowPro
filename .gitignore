@@ -1,0 +1,24 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+.DS_Store
+
+# Docker
+docker-data/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+
+# Environment
+.env
+.env.local
+
+# OS
+Thumbs.db

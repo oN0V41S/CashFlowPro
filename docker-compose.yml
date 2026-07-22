@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  # ─── Infraestrutura ───────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: cashflow-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cashflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cashflow_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-cashflow_core}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cashflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: cashflow-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: cashflow-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-cashflow}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-cashflow_pass}
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Core Banking (.NET) ──────────────────────────────────
+  core-banking:
+    build:
+      context: .
+      dockerfile: src/CoreBanking/Dockerfile
+    container_name: cashflow-core-banking
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://0.0.0.0:5001
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB:-cashflow_core};Username=${POSTGRES_USER:-cashflow};Password=${POSTGRES_PASSWORD:-cashflow_pass}
+      RabbitMQ__Host: rabbitmq
+      RabbitMQ__Username: ${RABBITMQ_USER:-cashflow}
+      RabbitMQ__Password: ${RABBITMQ_PASS:-cashflow_pass}
+    ports:
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./src/CoreBanking:/app/src
+      - ~/.nuget/packages:/root/.nuget/packages:ro
+
+volumes:
+  postgres_data:
