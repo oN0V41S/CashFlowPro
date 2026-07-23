@@ -79,8 +79,8 @@ flowchart LR
 | Eventos de domínio: TransactionCreated, TransferCompleted | ✅ |
 | RabbitMQ integration (publisher) | ✅ |
 | Testes de unidade e integração (xUnit) | ✅ |
-| API REST: criar conta, transferência, extrato | ⬜ |
-| Swagger/OpenAPI documentation | ⬜ |
+| API REST: criar conta, transferência, extrato | ✅ |
+| Swagger/OpenAPI documentation | ✅ |
 
 ### Sprint 2: Java + Angular + WebSocket
 

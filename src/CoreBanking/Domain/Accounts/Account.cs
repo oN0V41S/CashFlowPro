@@ -29,6 +29,10 @@ public class Account
     // ✅ Business Behavior - Debit
     public void Debit (decimal amount)
     {
+        // Rule: amount should not be 0.
+        if (amount == 0)
+            throw new ArgumentException("Valor deve ser Diferente de Zero");
+
         // Rule: It is not possible to withdraw more than the available balance + overdraft protection.
         if(Balance - amount < -500)
             throw new InvalidOperationException("Saldo Insuficiente (limite R$ 500 de cheque especial)");
@@ -40,9 +44,10 @@ public class Account
     public void Credit(decimal amount)
     {
         // Rule: credit amount must be positive (> 0)
-        if (amount <= 0)
-            throw new ArgumentException("Valor deve ser positivo");
-
+        if (amount == 0)
+            throw new ArgumentException("Valor deve ser Diferente de Zero");
+        else if (amount < 0)
+            throw new ArgumentException("Valor deve ser Positivo");
         Balance += amount;
     }
 
