@@ -1,8 +1,8 @@
 namespace CoreBanking.Models.Transaction;
 
-public record TransferRequest(
-    Guid FromAccountId,
-    Guid ToAccountId,
-    decimal Amount,
-    string? Description
-);
+public class TransferRequest
+{
+    public string ToAccountToken { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
+    public string? Description { get; set; }
+}

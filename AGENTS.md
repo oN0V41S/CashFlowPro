@@ -405,6 +405,25 @@ cd src/Frontend && npm start
 
 ---
 
+---
+
+## 📚 Base de Conhecimento Indexada (KB)
+
+O `AGENTS.md` é a visão geral do projeto. O detalhamento por especialização está indexado em `docs/` e serve de referência para o agente **Tutor** (`tutor.md`).
+
+| Especialização | Documento |
+|----------------|-----------|
+| System Design / Arquitetura | [`docs/architecture/system-design.md`](docs/architecture/system-design.md) |
+| Event-Driven / RabbitMQ | [`docs/architecture/event-driven.md`](docs/architecture/event-driven.md) |
+| Back-End .NET (Core Banking, DDD, convenções, erros) | [`docs/backend/dotnet-core-banking.md`](docs/backend/dotnet-core-banking.md) |
+| Back-End Java (Analytics, Redis, Gemini) | [`docs/backend/java-analytics-ai.md`](docs/backend/java-analytics-ai.md) |
+| Front-End Angular 18 | [`docs/frontend/angular-spa.md`](docs/frontend/angular-spa.md) |
+| Testes (xUnit, JUnit, Jasmine, Playwright) | [`docs/testing/testing-guide.md`](docs/testing/testing-guide.md) |
+| Workflow (commits, dependências, ADRs) | [`docs/workflow/development-standards.md`](docs/workflow/development-standards.md) |
+| Verificação de tarefas (EVAl) | [`docs/eval.sh`](docs/eval.sh) |
+
+> **Regra de ouro:** consulte sempre o doc da especialização antes de aprofundar um tema. O Tutor usa essa base para responder e direcionar o estudo.
+
 ## 👤 Contexto do Desenvolvedor
 
 - **Nome:** Rafael Augusto Nascimento Novais

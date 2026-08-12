@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.Json;
 using CoreBanking.Domain.Transaction.Events;
 using CoreBanking.Services;
@@ -13,9 +12,7 @@ public class RabbitMQEventPublisherTests
     [Fact]
     public async Task PublishAsync_ShouldSerializeAndPublishEventToCorrectExchange()
     {
-        var mockChannel = new Mock<IModel>();
-        var mockBasicProperties = new Mock<IBasicProperties>();
-        mockChannel.Setup(c => c.CreateBasicProperties()).Returns(mockBasicProperties.Object);
+        var mockChannel = new Mock<IChannel>();
 
         var publisher = new RabbitMQEventPublisher(mockChannel.Object);
 
@@ -28,16 +25,15 @@ public class RabbitMQEventPublisherTests
 
         await publisher.PublishAsync(transferEvent, "transfer.completed");
 
-        // Assert — Match.Create executa uma função real, NÃO uma Expression Tree
-        mockChannel.Verify(c => c.BasicPublish
-            (
+        mockChannel.Verify(c => c.BasicPublishAsync(
                 It.Is<string>(e => e == "cashflow-exchange"),
                 It.Is<string>(rk => rk == "transfer.completed"),
-                It.IsAny<bool>(),
-                It.IsAny<IBasicProperties>(),
-                It.IsAny<ReadOnlyMemory<byte>>() // ✅ Simplified, works every time
+                It.Is<bool>(m => m == true),
+                It.IsAny<BasicProperties>(),
+                It.IsAny<ReadOnlyMemory<byte>>(),
+                It.IsAny<CancellationToken>()
             ),
-        Times.Once
+            Times.Once
         );
     }
 }

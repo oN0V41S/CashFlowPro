@@ -5,34 +5,35 @@ using RabbitMQ.Client;
 
 namespace CoreBanking.Services;
 
-public class RabbitMQEventPublisher : IEventPublisher
+public class RabbitMQEventPublisher(IChannel channel) : IEventPublisher
 {
-    private readonly IModel _channel;
     private const string ExchangeName = "cashflow-exchange";
 
-    public RabbitMQEventPublisher(IModel channel)
+    public async Task PublishAsync<T>(T @event, string routingKey) where T : IDomainEvent
     {
-        _channel = channel;
+        await channel.ExchangeDeclareAsync(
+            exchange: ExchangeName,
+            type: ExchangeType.Topic,
+            durable: true,
+            autoDelete: false,
+            arguments: null,
+            passive: false,
+            noWait: false,
+            cancellationToken: CancellationToken.None);
 
-        // Ensures that the Topic type Exchange (key routing) exists in the broker
-        _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Topic, durable: true) ;
-    }
-
-    public Task PublishAsync<T>(T @event, string routingKey) where T : IDomainEvent
-    {
         var json = JsonSerializer.Serialize(@event);
         var body = Encoding.UTF8.GetBytes(json);
 
-        var properties = _channel.CreateBasicProperties();
-        properties.Persistent = true; // Ensures message survives RabbitMQ reboots
+        var properties = new BasicProperties
+        {
+            Persistent = true
+        };
 
-        _channel.BasicPublish(
+        await channel.BasicPublishAsync(
             exchange: ExchangeName,
             routingKey: routingKey,
+            mandatory: true,
             basicProperties: properties,
-            body: body
-        );
-
-        return Task.CompletedTask;
-    } 
+            body: body);
+    }
 }

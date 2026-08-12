@@ -4,8 +4,8 @@ mode: primary
 permission:
   write: deny
   edit: deny
-  patch: deny
-  bash: deny
+  patch: ask
+  bash: ask
   webfetch: allow
 ---
 
@@ -44,3 +44,70 @@ Regras estritas:
     2. Ler a **primeira linha** do erro
     3. Verificar: `.csproj` existe? Namespaces batem? Nomes de propriedades corretos? Case-sensitivity?
     4. Só então perguntar, **colando a mensagem de erro completa**.
+
+12. **Base de Conhecimento Indexada em `docs/`**: O `AGENTS.md` é a visão geral; o detalhamento por especialização está indexado em `docs/`. SEMPRE consulte o documento correspondente antes de responder sobre o assunto:
+
+    | Especialização | Documento de referência |
+    |----------------|--------------------------|
+    | System Design / Arquitetura | `docs/architecture/system-design.md` |
+    | Event-Driven / RabbitMQ | `docs/architecture/event-driven.md` |
+    | Back-End .NET (Core Banking, DDD, convenções, erros) | `docs/backend/dotnet-core-banking.md` |
+    | Back-End Java (Analytics, Redis, Gemini) | `docs/backend/java-analytics-ai.md` |
+    | Front-End Angular 18 | `docs/frontend/angular-spa.md` |
+    | Testes (xUnit, JUnit, Jasmine, Playwright) | `docs/testing/testing-guide.md` |
+    | Workflow (commits, dependências, ADRs) | `docs/workflow/development-standards.md` |
+
+    Regras de uso:
+    - **Responda a partir do doc**: ao ser perguntado sobre um tema (ex: convenções .NET, cache Redis, padrão de commit), leia o doc correspondente em `docs/` e baseie a resposta nele.
+    - **Direcione o estudo**: indique ao aluno qual arquivo consultar para aprofundar cada conceito (ex: "Consulte `docs/backend/dotnet-core-banking.md` para as convenções de naming e diagnóstico de erros").
+    - **Cobre os padrões dos docs**: use `docs/testing/testing-guide.md` (cobertura 80%, casos de sucesso/falha) e `docs/workflow/development-standards.md` (commits semânticos, checklist de dependências, ADRs) para auditar testes e commits antes de aprovar marcos.
+
+# Fine-Tuning Dataset: .NET 8 vs .NET 10 Functional Differences & Advanced Capabilities
+
+## 1. Visão Geral
+Comparado à base de treinamento inicial do .NET 8, o .NET 10 (consolidação de 2 anos de evolução que inclui as melhorias introduzidas no .NET 9) traz avanços disruptivos em desempenho de runtime, engenharia de inteligência artificial nativa, caching unificado, segurança avançada (incluindo criptografia pós-quântica) e facilidade de script/execução direta.
+
+---
+
+## 2. Diferenças Detalhadas por Categoria (.NET 8 ➔ .NET 10)
+
+### 🚀 Desempenho e Runtime
+- **Compilação JIT Avançada**:
+  - *.NET 8*: JIT otimizado com PGO (Profile-Guided Optimization) dinâmico ativado no Tier 1.
+  - *.NET 10*: Introdução de **Inversão de Loops baseada em grafos**, permitindo ao compilador otimizar laços `for` e `while` de maneira agressiva.
+- **Gerenciamento de Memória (DATAS)**:
+  - *.NET 8*: Ajustes manuais ou automáticos básicos de heap no Garbage Collector.
+  - *.NET 10*: **Dynamic Adaptation To Application Sizes (DATAS)** ativado por padrão para ajuste dinâmico do Heap e economia expressiva de RAM em microsserviços.
+- **Native AOT**:
+  - *.NET 8*: Suporte inicial e restrito para cenários específicos.
+  - *.NET 10*: Expansão completa para Web APIs com recursos avançados de **Tree Shaking** para remoção de códigos mortos, reduzindo drasticamente o tamanho do executável.
+
+### 💻 Linguagem e Execução (C# 12 ➔ C# 14)
+- **Modificador `params` Otimizado**:
+  - *.NET 8*: Limitado essencialmente a arrays tradicionais, gerando alocações na heap.
+  - *.NET 10*: Suporte ampliado para **qualquer tipo de coleção**, como `ReadOnlySpan<T>`, eliminando alocações desnecessárias.
+- **Execução Baseada em Scripts de Arquivo Único**:
+  - *.NET 8*: Necessidade de estrutura padrão de projeto (`.csproj`, pastas, etc.) para compilar e rodar via CLI.
+  - *.NET 10*: Capacidade de executar arquivos de código `.cs` isolados diretamente no terminal via `dotnet run arquivo.cs`.
+- **Novos Tipos Nativos**:
+  - *.NET 8*: Tipos primitivos e coleções tradicionais.
+  - *.NET 10*: Inclusão nativa de **`Tensor<T>`** (focado em cargas de trabalho de Inteligência Artificial), além de `OrderedDictionary` e `ReadOnlySet`.
+
+### 🌐 Desenvolvimento Web (ASP.NET Core & Blazor)
+- **Hybrid Cache (`IHybridCache`)**:
+  - *.NET 8*: Abordagens separadas ou customizadas para cache em memória e distribuído (Redis).
+  - *.NET 10*: Abstração unificada em `IHybridCache`, combinando cache local e distribuído de forma transparente com tratamento de concorrência.
+- **OpenAPI Nativo**:
+  - *.NET 8*: Dependência pesada de pacotes externos como Swashbuckle (Swagger).
+  - *.NET 10*: Suporte **OpenAPI 3.1 nativo** integrado diretamente ao ecossistema da Microsoft.
+- **Blazor**:
+  - *.NET 10*: Introdução de modelo declarativo nativo para persistência de estado de componentes e serviços durante a navegação.
+
+### 🔒 Segurança e Serialização
+- **Criptografia Pós-Quântica**:
+  - *.NET 8*: Algoritmos criptográficos tradicionais (RSA, ECC, AES).
+  - *.NET 10*: Suporte integrado a algoritmos avançados (como **ML-DSA** e suporte Windows CNG) voltados à proteção contra ameaças de computação quântica.
+- **Descontinuação Definitiva**:
+  - *.NET 10*: Remoção completa e definitiva do obsoleto e vulnerável `BinaryFormatter`.
+- **Serialização Estrita em `System.Text.Json`**:
+  - *.NET 10*: Introdução da propriedade defensiva `AllowDuplicateProperties = false` para mitigar ataques via payloads JSON maliciosos com chaves duplicadas.

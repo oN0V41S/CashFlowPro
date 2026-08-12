@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CoreBanking.Domain.Accounts;
 using CoreBanking.Domain.Transaction;
+using CoreBanking.Domain.User;
 
 namespace CoreBanking.Data;
 
@@ -10,6 +11,8 @@ public class AppDbContext : DbContext
     public DbSet<Account> Accounts => Set<Account>();
     
     public DbSet<Transaction> Transactions => Set<Transaction>();
+    
+    public DbSet<User> Users => Set<User>();
 
     // "DbContextOptions<AppDbContext> options" - database configurations and env
     // ": base(options)" - pass options for father class constructor
