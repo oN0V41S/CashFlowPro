@@ -101,6 +101,6 @@ public class TransferServiceTests
             service.TransferAsync(accountFrom.Id, accountTo.Id, 600)
         );
 
-        Assert.Contains("Saldo Insuficiente", exception.Message);
+        Assert.Contains("saldo insuficiente", exception.Message);
     }
 }

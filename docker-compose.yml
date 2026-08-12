@@ -46,6 +46,14 @@ services:
       timeout: 5s
       retries: 5
 
+  adminer:
+    image: adminer:latest
+    container_name: cashflow-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
   # ─── Core Banking (.NET) ──────────────────────────────────
   core-banking:
     build:
@@ -54,13 +62,13 @@ services:
     container_name: cashflow-core-banking
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://0.0.0.0:5001
+      ASPNETCORE_URLS: http://0.0.0.0:5000
       ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB:-cashflow_core};Username=${POSTGRES_USER:-cashflow};Password=${POSTGRES_PASSWORD:-cashflow_pass}
       RabbitMQ__Host: rabbitmq
       RabbitMQ__Username: ${RABBITMQ_USER:-cashflow}
       RabbitMQ__Password: ${RABBITMQ_PASS:-cashflow_pass}
     ports:
-      - "5001:5001"
+      - "5000:5000"
     depends_on:
       postgres:
         condition: service_healthy
