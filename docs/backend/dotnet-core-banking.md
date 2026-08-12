@@ -85,3 +85,67 @@ src/CoreBanking/
    ↓ ainda com erro?
 4. Perguntar colando a MENSAGEM DO ERRO completa
 ```
+
+## Implementação Sprint 1 (Completo)
+
+### Domain Entities
+
+```
+src/CoreBanking/Domain/
+├── Accounts/
+│   ├── Account.cs          # Aggregate Root com factory method Open()
+│   └── AccountType.cs      # Enum: Checking, Savings
+├── Transaction/
+│   ├── Transaction.cs      # Entity com factory method Create()
+│   ├── Money.cs            # Value Object
+│   └── Events/
+│       └── TransferCompleted.cs  # Domain Event
+└── User/
+    └── User.cs             # Entity com factory method Register(accountId, ...)
+```
+
+### Entity Framework - Migrations
+
+| Migration | Descrição |
+|-----------|-----------|
+| `InitialCreate` | Cria tabelas Accounts, Transactions |
+| `AddAccountIdToUser` | Adiciona AccountId na tabela User (relacionamento 1:1) |
+
+### API Endpoints
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/auth/register` | Cria User + Account, retorna JWT |
+| POST | `/api/auth/login` | Autentica, retorna JWT |
+| POST | `/api/transfers` | Realiza transferência entre contas |
+| GET | `/api/accounts/{id}/statement` | Extrato da conta |
+
+### Autenticação JWT
+
+```json
+// Claims incluídas no token
+{
+  "sub": "user-id",
+  "email": "user@email.com",
+  "role": "User",
+  "accountId": "account-id",  // ← Identifica conta de origem
+  "jti": "unique-token-id"
+}
+```
+
+### Validação de Segurança (Transferência)
+
+| Origem | Destino |
+|--------|---------|
+| `accountId` extraído do JWT (claim personalizado) | `toAccountToken` decodificado do body |
+| Nunca confia no cliente | Valida assinatura JWT do token |
+
+### Infraestrutura Docker
+
+| Serviço | Porta | Container |
+|---------|-------|-----------|
+| PostgreSQL | 5432 | cashflow-postgres |
+| Redis | 6379 | cashflow-redis |
+| RabbitMQ | 5672/15672 | cashflow-rabbitmq |
+| Core Banking | 5000 | cashflow-core-banking |
+| Adminer | 8080 | cashflow-adminer |

@@ -68,7 +68,7 @@ flowchart LR
 
 ## 📅 BootCamp — 3 Sprints (3 Semanas)
 
-### Sprint 1: Fundação .NET + System Design
+### Sprint 1: Fundação .NET + System Design ✅ CONCLUÍDA
 
 **Foco:** Core Banking, DDD, Event-Driven, ASP.NET Core, EF Core, RabbitMQ, Docker Compose
 
@@ -94,6 +94,17 @@ flowchart LR
 | Angular SPA: Dashboard com gráficos, transferências | ⬜ |
 | Integração Angular → Gateway → Serviços | ⬜ |
 | Testes E2E com Playwright | ⬜ |
+
+**Branch Strategy:**
+
+| Branch | Dependência | Descrição |
+|--------|-------------|-----------|
+| `feature/java-analytics` | - | Java/Spring Analytics Service + RabbitMQ consumer |
+| `feature/redis-cache` | java-analytics | Cache Redis com Cache-Aside pattern |
+| `feature/notifications-signalr` | - | Notification Service .NET + SignalR |
+| `feature/angular-frontend` | - | Angular 18 SPA Dashboard |
+| `feature/angular-integration` | angular-frontend, notifications-signalr | API Gateway + integração |
+| `feature/e2e-playwright` | Todas anteriores | Testes E2E com Playwright |
 
 ### Sprint 3: IA + Observabilidade + Resilience
 
