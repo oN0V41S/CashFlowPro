@@ -154,3 +154,34 @@ sequenceDiagram
 - **Gemini API**: Geração de insights financeiros via LLM
 - **Observabilidade**: OpenTelemetry + Prometheus + Grafana
 - **Resiliência**: Rate Limiting + Circuit Breaker
+
+---
+
+## Diagramas C4 (Modelagem Arquitetural)
+
+A modelagem segue o **Modelo C4** (Context, Containers, Components) para diferentes níveis de zoom.
+
+| Nível | Arquivo | Descrição | Visualização |
+| :--- | :--- | :--- | :--- |
+| **1. System Context** | [`c4/01-system-context.md`](c4/01-system-context.md) | CashFlow Pro como caixa preta + atores externos | `C4Context` |
+| **2. Containers** | [`c4/02-containers.md`](c4/02-containers.md) | Aplicações, bancos, filas, protocolos de comunicação | `C4Container` |
+| **3. Core Banking Components** | [`c4/03-core-banking-components.md`](c4/03-core-banking-components.md) | Controllers, Services, Repositories, Event Publisher | `C4Component` |
+| **3. Analytics Components** | [`c4/03-analytics-components.md`](c4/03-analytics-components.md) | Consumers, Aggregation, Cache, Gemini Adapter, Fraud | `C4Component` |
+| **3. Notifications Components** | [`c4/03-notifications-components.md`](c4/03-notifications-components.md) | SignalR Hub, RabbitMQ Consumer, Presence, Backplane | `C4Component` |
+
+> **Como visualizar**: Abra os arquivos `.md` no GitHub/GitLab ou cole o código Mermaid no [Mermaid Live Editor](https://mermaid.live/).
+
+### Diagramas de Sequência
+
+Fluxos de comunicação detalhados para operações-chave:
+
+| Arquivo | Título |
+| :--- | :--- |
+| [sequences/01-financial-transfer.md](sequences/01-financial-transfer.md) | Financial Transfer Flow |
+| [sequences/02-event-processing.md](sequences/02-event-processing.md) | Event Processing Flow |
+| [sequences/03-ai-insights-generation.md](sequences/03-ai-insights-generation.md) | AI Insights Generation |
+| [sequences/04-realtime-notification-delivery.md](sequences/04-realtime-notification-delivery.md) | Real-time Notification Delivery |
+| [sequences/05-user-authentication.md](sequences/05-user-authentication.md) | User Authentication Flow |
+| [sequences/06-account-creation.md](sequences/06-account-creation.md) | Account Creation Flow |
+| [sequences/07-fraud-detection-alert.md](sequences/07-fraud-detection-alert.md) | Fraud Detection Alert |
+| [sequences/08-health-score-calculation.md](sequences/08-health-score-calculation.md) | Health Score Calculation |

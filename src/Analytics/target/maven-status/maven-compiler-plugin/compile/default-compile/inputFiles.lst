@@ -1,0 +1,7 @@
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/AnalyticsApplication.java
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/config/RabbitMQConfig.java
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/config/RedisConfig.java
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/consumer/TransferCompletedConsumer.java
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/model/TransferEvent.java
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/service/AnalyticsService.java
+/home/novais-kr/Documentos/repos/CashFlowPro/src/Analytics/src/main/java/com/cashflow/analytics/service/CacheService.java

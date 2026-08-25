@@ -43,8 +43,7 @@ public class AnalyticsService {
 
     // Compute reals insights (when not have cached)
     public Object computeInsights(UUID accountId) {
-        log.info("Computing insights for account: {}", accountId);
-        // Implement Aggregation logic (Marco 3)
-        return null;
+        log.info("Computing insights (Simulated) for account: {}", accountId);
+        return "Simulated insights for " + accountId;
     } 
 }

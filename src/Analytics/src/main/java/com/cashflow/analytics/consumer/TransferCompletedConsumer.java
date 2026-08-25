@@ -19,7 +19,7 @@ public class TransferCompletedConsumer {
         this.analyticsService = analyticsService;
     }
 
-    @RabbitListener(queues = "${analytics.queue.transfer.completed}")
+    @RabbitListener(queues = "${analytics.queue.transfer-completed}")
     public void handleTransferCompletedEvent(TransferEvent transferEvent) {
         log.info("Received transfer completed event: de{}, para={}, valor={}", transferEvent.fromAccountId(), transferEvent.toAccountId(), transferEvent.amount());
         analyticsService.processTransfer(transferEvent);
