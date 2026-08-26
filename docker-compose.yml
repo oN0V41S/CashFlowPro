@@ -80,5 +80,24 @@ services:
       - ./src/CoreBanking:/app/src
       - ~/.nuget/packages:/root/.nuget/packages:ro
 
+  analytics:
+    build:
+      context: src/Analytics
+      dockerfile: Dockerfile
+    container_name: cashflow-analytics
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      RabbitMQ__Host: rabbitmq
+      RabbitMQ__Username: ${RABBITMQ_USER:-cashflow}
+      RabbitMQ__Password: ${RABBITMQ_PASS:-cashflow_pass}
+      REDIT_HOST: redis
+    ports:
+      - "5001:5001"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
 volumes:
   postgres_data:
