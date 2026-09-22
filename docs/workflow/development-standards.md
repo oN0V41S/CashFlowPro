@@ -49,7 +49,6 @@ Toda decisão arquitetural relevante (nova dependência, padrão de comunicaçã
 Este repositório mantém o `AGENTS.md` como visão geral. O detalhamento por especialidade fica em `docs/`:
 
 - **Back-End**: `docs/backend/dotnet-core-banking.md`, `docs/backend/java-analytics-ai.md`
-- **Front-End**: `docs/frontend/angular-spa.md`
 - **Microserviço / System Design**: `docs/architecture/system-design.md`, `docs/architecture/event-driven.md`
 - **Testes**: `docs/testing/testing-guide.md`
 - **Workflow**: `docs/workflow/development-standards.md`

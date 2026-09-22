@@ -6,7 +6,6 @@ Plataforma fintech educacional para aprender na prática:
 
 - **.NET** (ASP.NET Core 8+) — Core Banking, API Gateway, Notifications
 - **Java** (Spring Boot 3) — Analytics & AI Insights
-- **Angular 18** — Frontend SPA
 - **System Design** — Event-Driven Architecture, DDD, Microserviços
 - **IA** — Gemini API para insights financeiros
 - **Observabilidade** — OpenTelemetry, Prometheus, Grafana
@@ -53,7 +52,6 @@ flowchart LR
 | **Analytics & AI** | Java Spring Boot 3, Redis, Gemini API | Insights financeiros, detecção de fraude, health score, cache |
 | **Notifications** | .NET 8+, SignalR, Redis backplane | WebSocket em tempo real, notificações, presença |
 | **API Gateway** | .NET 8+ (YARP/Ocelot) | Roteamento, JWT, rate limiting |
-| **Frontend** | Angular 18 (Standalone, Signals) | Dashboard, transferências, insights |
 
 ### Infraestrutura
 
@@ -82,18 +80,17 @@ flowchart LR
 | API REST: criar conta, transferência, extrato | ✅ |
 | Swagger/OpenAPI documentation | ✅ |
 
-### Sprint 2: Java + Angular + WebSocket
+### Sprint 2: Java Analytics + Redis + Notifications
 
-**Foco:** Spring Boot 3, Angular 18, SignalR, Redis Cache, integração polyglot
+**Foco:** Spring Boot 3, SignalR, Redis Cache, integração polyglot
 
 | Tarefa | Status |
 |--------|--------|
 | Analytics Service (Java/Spring): consome eventos do RabbitMQ | ⬜ |
 | Redis: cache de agregações financeiras (Cache-Aside) | ⬜ |
 | Notification Service (.NET + SignalR): WebSocket em tempo real | ⬜ |
-| Angular SPA: Dashboard com gráficos, transferências | ⬜ |
-| Integração Angular → Gateway → Serviços | ⬜ |
-| Testes E2E com Playwright | ⬜ |
+| JUnit + Mockito: testes unitários Analytics | ⬜ |
+| TestContainers: integração Spring Data + Redis | ⬜ |
 
 **Branch Strategy:**
 
@@ -102,18 +99,15 @@ flowchart LR
 | `feature/java-analytics` | - | Java/Spring Analytics Service + RabbitMQ consumer |
 | `feature/redis-cache` | java-analytics | Cache Redis com Cache-Aside pattern |
 | `feature/notifications-signalr` | - | Notification Service .NET + SignalR |
-| `feature/angular-frontend` | - | Angular 18 SPA Dashboard |
-| `feature/angular-integration` | angular-frontend, notifications-signalr | API Gateway + integração |
-| `feature/e2e-playwright` | Todas anteriores | Testes E2E com Playwright |
 
 ### Sprint 3: IA + Observabilidade + Resilience
 
-**Foco:** Gemini API, OpenTelemetry, Prometheus/Grafana, Rate Limiting, Circuit Breaker
+**Foco:** Gemini API, Spring Cloud OpenFeign, OpenTelemetry, Prometheus/Grafana, Rate Limiting, Circuit Breaker
 
 | Tarefa | Status |
 |--------|--------|
-| AI Insights Service: consumo de eventos + classificação inteligente | ⬜ |
-| Gemini API: prompts para insights financeiros | ⬜ |
+| Spring Cloud OpenFeign: client para Gemini API | ⬜ |
+| AI Insights: classificação inteligente de transações | ⬜ |
 | Cache de prompts e respostas LLM no Redis | ⬜ |
 | OpenTelemetry: tracing distribuído em todos os serviços | ⬜ |
 | Prometheus + Grafana: dashboards de métricas | ⬜ |
@@ -130,7 +124,6 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     actor User
-    participant Angular as Angular SPA
     participant Gateway as API Gateway .NET
     participant Core as Core Banking .NET
     participant RMQ as RabbitMQ
@@ -138,14 +131,12 @@ sequenceDiagram
     participant Notif as Notifications .NET
     participant Redis as Redis Cache
 
-    User->>Angular: Transferência R$ 150
-    Angular->>Gateway: POST /api/transfers
+    User->>Gateway: POST /api/transfers
     Gateway->>Core: Rota autenticada
     Core->>Core: Valida saldo + Débito origem
     Core->>Core: Crédito destino (transação ACID)
     Core-->>Gateway: 201 Transfer Created
-    Gateway-->>Angular: { status: "completed" }
-    Angular->>User: Saldo atualizado!
+    Gateway-->>User: { status: "completed" }
 
     rect rgb(200, 220, 240)
         Note right of Core: Event-Driven
@@ -154,14 +145,12 @@ sequenceDiagram
         Analytics->>Analytics: Atualiza agregações
         Analytics->>Redis: Cache: invalida insights
         RMQ->>Notif: Consumer
-        Notif->>Angular: WebSocket: nova notificação
-        Angular->>User: 🔔 "R$ 150 recebidos!"
+        Notif->>User: WebSocket: 🔔 "R$ 150 recebidos!"
     end
 
     rect rgb(240, 220, 200)
         Note right of Analytics: IA Insights
-        User->>Angular: Abrir insights
-        Angular->>Gateway: GET /api/insights
+        User->>Gateway: GET /api/insights
         Gateway->>Analytics: Rota
         Analytics->>Redis: Cache hit?
         alt Cache miss
@@ -169,8 +158,7 @@ sequenceDiagram
             Analytics->>Redis: Salva cache (TTL 1h)
         end
         Analytics-->>Gateway: { insights }
-        Gateway-->>Angular: Dashboard de insights
-        Angular->>User: 📊 Gráficos e dicas
+        Gateway-->>User: 📊 Insights financeiros
     end
 ```
 
@@ -190,7 +178,7 @@ sequenceDiagram
 | ASP.NET Core 8+ | Core Banking, Gateway, Notifications | S1, S2 |
 | SignalR | WebSocket real-time | S2 |
 | Java Spring Boot 3 | Analytics & AI Service | S2, S3 |
-| Angular 18 | Frontend SPA | S2 |
+| Spring Cloud OpenFeign | Client HTTP para Gemini API | S3 |
 | PostgreSQL 16 | Banco principal | S1 |
 | Redis 7 | Cache, Sessões, Rate Limiting | S2, S3 |
 | RabbitMQ 4 | Event Bus | S1 |
@@ -199,8 +187,7 @@ sequenceDiagram
 | Prometheus + Grafana | Métricas e Dashboards | S3 |
 | Gemini API | AI Insights | S3 |
 | xUnit + TestContainers | Testes .NET | S1 |
-| JUnit + TestContainers | Testes Java | S2 |
-| Playwright | Testes E2E | S2 |
+| JUnit + Mockito + TestContainers | Testes Java | S2 |
 
 ---
 
@@ -231,8 +218,7 @@ CashFlowPro/
 │   │   ├── Services/           # Application services
 │   │   └── Dockerfile
 │   ├── Analytics/              # Java Spring Boot (Sprint 2)
-│   ├── Notifications/          # .NET + SignalR (Sprint 2)
-│   └── Frontend/               # Angular 18 (Sprint 2)
+│   └── Notifications/          # .NET + SignalR (Sprint 2)
 ├── tests/
 │   └── CoreBanking.Tests/      # Testes unitários xUnit
 │       ├── Domain/
@@ -255,8 +241,6 @@ CashFlowPro/
 | .NET Integration | TestContainers | EF Core + PostgreSQL, RabbitMQ |
 | Java Unit | JUnit + Mockito | Analytics services, AI adapter |
 | Java Integration | TestContainers | Spring Data JPA + PostgreSQL, Redis |
-| Angular | Jasmine + Karma | Componentes, serviços, signals |
-| E2E | Playwright | Fluxos completos (transferência, dashboard) |
 
 ---
 
@@ -332,9 +316,6 @@ cd src/CoreBanking && dotnet run
 
 # Analytics (Java) — Sprint 2
 cd src/Analytics && ./mvnw spring-boot:run
-
-# Frontend (Angular) — Sprint 2
-cd src/Frontend && npm start
 ```
 
 ---
@@ -428,8 +409,8 @@ O `AGENTS.md` é a visão geral do projeto. O detalhamento por especialização 
 | Event-Driven / RabbitMQ | [`docs/architecture/event-driven.md`](docs/architecture/event-driven.md) |
 | Back-End .NET (Core Banking, DDD, convenções, erros) | [`docs/backend/dotnet-core-banking.md`](docs/backend/dotnet-core-banking.md) |
 | Back-End Java (Analytics, Redis, Gemini) | [`docs/backend/java-analytics-ai.md`](docs/backend/java-analytics-ai.md) |
-| Front-End Angular 18 | [`docs/frontend/angular-spa.md`](docs/frontend/angular-spa.md) |
-| Testes (xUnit, JUnit, Jasmine, Playwright) | [`docs/testing/testing-guide.md`](docs/testing/testing-guide.md) |
+| Testes (xUnit, JUnit + Mockito, TestContainers) | [`docs/testing/testing-guide.md`](docs/testing/testing-guide.md) |
+| Bootcamp DIO × Itaú (trilha e módulos) | [`docs/bootcamp/dio-itau-path.md`](docs/bootcamp/dio-itau-path.md) |
 | Workflow (commits, dependências, ADRs) | [`docs/workflow/development-standards.md`](docs/workflow/development-standards.md) |
 | Verificação de tarefas (EVAl) | [`docs/eval.sh`](docs/eval.sh) |
 
@@ -440,6 +421,6 @@ O `AGENTS.md` é a visão geral do projeto. O detalhamento por especialização 
 - **Nome:** Rafael Augusto Nascimento Novais
 - **Projeto paralelo:** [Finance Guy](https://github.com/oN0V41S/controleFinanceiro) (Next.js + TypeScript)
 - **Faculdade:** ADS — UNiSA
-- **Estudos em andamento:** Java Spring + Angular (BootCamp Avanade/DIO), Microsoft AI & ML Engineering Certificate
+- **Estudos em andamento:** DIO × Itaú — Java com IA (até 22/11/2026) · Microsoft AI & ML Engineering Certificate (pausado)
 - **Stack atual:** TypeScript, Node.js, Next.js, React, PostgreSQL, Prisma, Docker
-- **Stack alvo:** .NET, Java, Angular, System Design, IA, Observabilidade
+- **Stack alvo:** .NET, Java Spring Boot, System Design, IA Generativa, Observabilidade
