@@ -24,17 +24,18 @@ public class CacheService {
     }
 
     // Cache-Aside Pattern: Get from cache, or cache it
-    public Object getOrCompute(UUID accountId, Supplier<Object> supplier){
+    @SuppressWarnings("unchecked")
+    public <T> T getOrCompute(UUID accountId, Supplier<T> supplier){
         String key = buildKey(accountId);
         Object cached = redisTemplate.opsForValue().get(key);
 
         if(cached != null){
             log.debug("Cache hit for account: {}", accountId);
-            return cached;
+            return (T) cached;
         }
 
         log.debug("Cache miss for account: {}", accountId);
-        Object computed = supplier.get();
+        T computed = supplier.get();
         redisTemplate.opsForValue().set(key, computed, Duration.ofMinutes(ttlMinutes));
         return computed;
     }

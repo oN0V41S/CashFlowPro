@@ -1,11 +1,13 @@
 package com.cashflow.analytics.service;
 
+import com.cashflow.analytics.model.InsightResponse;
 import com.cashflow.analytics.model.TransferEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -37,13 +39,13 @@ public class AnalyticsService {
     }
     
     // Get insights from an account (using cache)
-    public Object getInsights(UUID accountId) {
+    public InsightResponse getInsights(UUID accountId) {
         return cacheService.getOrCompute(accountId, () -> computeInsights(accountId));
     }
 
     // Compute reals insights (when not have cached)
-    public Object computeInsights(UUID accountId) {
+    public InsightResponse computeInsights(UUID accountId) {
         log.info("Computing insights (Simulated) for account: {}", accountId);
-        return "Simulated insights for " + accountId;
+        return new InsightResponse(accountId, "Simulated insights for " + accountId, Instant.now().toString());
     } 
 }
