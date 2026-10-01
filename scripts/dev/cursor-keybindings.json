@@ -1,0 +1,15 @@
+// CashFlow Pro — keyboard shortcuts for Cursor/VS Code.
+// Paste these entries inside the array of your user keybindings.json
+// (Ctrl+Shift+P -> "Preferences: Open Keyboard Shortcuts (JSON)").
+// Each one runs a task from .vscode/tasks.json. Prefix: Ctrl+Alt.
+[
+    { "key": "ctrl+alt+u", "command": "workbench.action.tasks.runTask", "args": "CF: Infra up" },
+    { "key": "ctrl+alt+d", "command": "workbench.action.tasks.runTask", "args": "CF: Infra down" },
+    { "key": "ctrl+alt+l", "command": "workbench.action.tasks.runTask", "args": "CF: Logs analytics" },
+    { "key": "ctrl+alt+r", "command": "workbench.action.tasks.runTask", "args": "CF: Analytics run" },
+    { "key": "ctrl+alt+t", "command": "workbench.action.tasks.runTask", "args": "CF: Analytics test (current file)" },
+    { "key": "ctrl+alt+shift+t", "command": "workbench.action.tasks.runTask", "args": "CF: Analytics test (all)" },
+    { "key": "ctrl+alt+b", "command": "workbench.action.tasks.runTask", "args": "CF: Analytics build" },
+    { "key": "ctrl+alt+c", "command": "workbench.action.tasks.runTask", "args": "CF: CoreBanking run" },
+    { "key": "ctrl+alt+a", "command": "workbench.action.tasks.runTask", "args": "CF: Test all" }
+]

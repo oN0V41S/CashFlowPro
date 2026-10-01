@@ -37,6 +37,7 @@ Consumer RabbitMQ → cache Redis → preparação para Gemini API.
 - Eventos: `TransactionCreated` e `TransferCompleted` via RabbitMQ
 - Cache: Cache-Aside pattern (Redis). TTL padrão insights: 1h
 - Sem lógica de negócio nos controllers — vai nos services
+- Idioma do código: **en-US** (identificadores, comentários, logs, mensagens de exceção, nomes de testes). Conversa e documentação seguem em pt-BR
 
 ## O que NÃO fazer
 
@@ -44,6 +45,22 @@ Consumer RabbitMQ → cache Redis → preparação para Gemini API.
 - Não criar migrações EF Core sem confirmar com o dev
 - Não alterar `AGENTS.md` ou `CLAUDE.md` sem pedido explícito
 - Não usar `dotnet ef` com `--force` sem avisar
+
+## Atalhos de dev (profile + Cursor)
+
+Funções `cf-*` com o mesmo nome no Windows (`scripts/dev/profile.ps1`) e no Debian (`scripts/dev/profile.sh`). Tasks do Cursor em `.vscode/tasks.json` (local, ignorado pelo git); atalhos de teclado em `scripts/dev/cursor-keybindings.json`.
+
+| Função | Atalho Cursor | O que faz |
+|--------|---------------|-----------|
+| `cf-up` / `cf-down` / `cf-logs [svc]` | `Ctrl+Alt+U` / `D` / `L` | Infra Docker (postgres, redis, rabbitmq) |
+| `cf-an-run` | `Ctrl+Alt+R` | Roda o Analytics |
+| `cf-an-test [Classe]` | `Ctrl+Alt+T` (arquivo atual) · `Ctrl+Alt+Shift+T` (todos) | Testes Java, falhas no console |
+| `cf-an-build` | `Ctrl+Alt+B` | Empacota o Analytics |
+| `cf-cb-run` | `Ctrl+Alt+C` | Roda o Core Banking |
+| `cf-test-all` | `Ctrl+Alt+A` | `dotnet test` + testes Java |
+| `cf-mkpkg <pacote>` | — | Cria pacote Java em `main` e `test` |
+
+Referência completa (instalação, convenções por SO): `scripts/dev/README.md`. Ao criar ou renomear uma função, atualizar o `.ps1`, o `.sh`, o `tasks.json`, o `cursor-keybindings.json` e esta tabela.
 
 ## Refs rápidas
 

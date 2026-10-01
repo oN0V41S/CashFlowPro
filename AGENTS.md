@@ -318,6 +318,19 @@ cd src/CoreBanking && dotnet run
 cd src/Analytics && ./mvnw spring-boot:run
 ```
 
+### Atalhos de dev (profile + Cursor)
+
+Funções `cf-*` iguais no Windows (`scripts/dev/profile.ps1`) e no Debian (`scripts/dev/profile.sh`); tasks em `.vscode/tasks.json` e teclas em `scripts/dev/cursor-keybindings.json`. Detalhes em [`scripts/dev/README.md`](scripts/dev/README.md).
+
+| Função | Atalho Cursor | O que faz |
+|--------|---------------|-----------|
+| `cf-up` / `cf-down` / `cf-logs [svc]` | `Ctrl+Alt+U` / `D` / `L` | Infra Docker |
+| `cf-an-run` / `cf-an-build` | `Ctrl+Alt+R` / `B` | Roda / empacota o Analytics |
+| `cf-an-test [Classe]` | `Ctrl+Alt+T` (arquivo atual) · `Ctrl+Alt+Shift+T` (todos) | Testes Java |
+| `cf-cb-run` | `Ctrl+Alt+C` | Roda o Core Banking |
+| `cf-test-all` | `Ctrl+Alt+A` | `dotnet test` + testes Java |
+| `cf-mkpkg <pacote>` | — | Cria pacote Java em `main` e `test` |
+
 ---
 
 ## 📐 Decisões de Arquitetura (ADRs)
