@@ -15,7 +15,7 @@ import { closeSync, existsSync, fstatSync, openSync, readFileSync, readSync, wri
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const WINDOW = Number(process.env.CF_CONTEXT_WINDOW) || 200_000;
+const WINDOW = Number(process.env.CF_CONTEXT_WINDOW) || 175_000;
 const WARN_PCT = Number(process.env.CF_CONTEXT_WARN) || 70;
 const STEP_PCT = Number(process.env.CF_CONTEXT_STEP) || 5;
 const TAIL_BYTES = 512 * 1024;

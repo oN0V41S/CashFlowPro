@@ -1,6 +1,6 @@
 {
   "env": {
-    "CF_CONTEXT_WINDOW": "300000"
+    "CF_CONTEXT_WINDOW": "190000"
   },
   "hooks": {
     "UserPromptSubmit": [
