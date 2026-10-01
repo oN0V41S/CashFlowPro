@@ -7,6 +7,9 @@ obj/
 *.log
 .DS_Store
 
+# Java / Maven
+target/
+
 # Docker
 docker-data/
 
