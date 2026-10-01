@@ -16,7 +16,7 @@ public class CacheService {
     
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @Value("${analytics.cache.ttl-minutes:5}")
+    @Value("${analytics.cache.ttl-minutes:60}")
     private int ttlMinutes;
 
     public CacheService(RedisTemplate<String, Object> redisTemplate) {

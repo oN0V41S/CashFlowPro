@@ -25,7 +25,7 @@ spring:
 
 analytics:
   cache:
-    ttl-minutes: 5
+    ttl-minutes: 60
   queue:
     transfer-completed: cashflow.transfer-completed
   exchange: 
