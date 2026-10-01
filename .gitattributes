@@ -1,0 +1,8 @@
+# Shell scripts must keep LF on every OS (CRLF breaks them on Linux/WSL: "bad interpreter /bin/sh^M")
+*.sh    text eol=lf
+mvnw    text eol=lf
+*.java  text eol=lf
+*.yml   text eol=lf
+
+# Windows batch files keep CRLF
+*.cmd   text eol=crlf

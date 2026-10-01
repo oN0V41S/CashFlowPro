@@ -43,9 +43,10 @@ cf-an-build() { (cd "$CF_ANALYTICS" && ./mvnw clean package -DskipTests); }
 cf-an-test() {
   local args=(test -B -Dsurefire.useFile=false -DtrimStackTrace=true)
   [ -n "$1" ] && args+=("-Dtest=$1")
-  # Stop printing at "Total time:", which drops Maven's long trailing help text (the cause is printed above it).
+  # Hide only Maven's boilerplate (help links, timing); the "Failed to execute goal ..." cause is kept.
   (cd "$CF_ANALYTICS" && ./mvnw "${args[@]}" | awk '
-    /Total time:/ { exit }
+    /Re-run Maven|To see the full stack trace|For more information about the errors|\[Help 1\]|Please refer to dump files|Total time:|Finished at:/ { next }
+    /^\[ERROR\][ ]*$/ { next }
     { print }
     /BUILD SUCCESS/ { passed = 1 }
     # Surefire failure line, e.g. "[ERROR]   TransferEventTest.myTest:39 » message"

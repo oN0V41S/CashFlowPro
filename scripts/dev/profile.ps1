@@ -57,13 +57,12 @@ function cf-an-test {
     Invoke-CfIn $CfAnalytics {
         $mvnArgs = @('test', '-B', '-Dsurefire.useFile=false', '-DtrimStackTrace=true')
         if ($TestName) { $mvnArgs += "-Dtest=$TestName" }
-        # Stop printing at "Total time:", which drops Maven's long trailing help text (the cause is printed above it).
-        $done = $false
+        # Hide only Maven's boilerplate (help links, timing); the "Failed to execute goal ..." cause is kept.
+        $noise = 'Re-run Maven|To see the full stack trace|For more information about the errors|\[Help 1\]|Please refer to dump files|Total time:|Finished at:|^\[ERROR\]\s*$'
         $passed = $false
         $failed = New-Object System.Collections.Generic.List[string]
         .\mvnw.cmd @mvnArgs | ForEach-Object {
-            if ($_ -match 'Total time:') { $done = $true }
-            if ($done) { return }
+            if ($_ -match $noise) { return }
             $_
             if ($_ -match 'BUILD SUCCESS') { $passed = $true }
             # Surefire failure line, e.g. "[ERROR]   TransferEventTest.myTest:39 » message"
