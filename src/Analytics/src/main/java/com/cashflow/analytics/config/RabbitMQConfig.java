@@ -13,7 +13,7 @@ public class RabbitMQConfig{
     @Value("${analytics.exchange.events:cashflow-exchange}")
     private String eventsExchange;
 
-    @Value("${analytics.queue.transfer-completed:cashflow.transfer.completed}")
+    @Value("${analytics.queue.transfer-completed:cashflow.transfer-completed}")
     private String transferCompletedQueue;
 
     // Exchange (Already created by Core Banking)

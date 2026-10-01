@@ -1,6 +1,8 @@
 package com.cashflow.analytics.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -9,8 +11,9 @@ import java.util.UUID;
     * Released for Core Banking (.NET) not RabbitMQ.
 */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record TransferEvent(
-    @JsonProperty("fromAccountId") UUID fromAccountId,
-    @JsonProperty("toAccountId") UUID toAccountId,
-    @JsonProperty("amount") BigDecimal amount
+    @JsonProperty @JsonAlias("FromAccountId") UUID fromAccountId,
+    @JsonProperty @JsonAlias("ToAccountId") UUID toAccountId,
+    @JsonProperty @JsonAlias("Amount") BigDecimal amount
 ) {}
