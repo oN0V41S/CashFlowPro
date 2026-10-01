@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # ─── Infraestrutura ───────────────────────────────────────
   postgres:
@@ -86,11 +84,10 @@ services:
       dockerfile: Dockerfile
     container_name: cashflow-analytics
     environment:
-      SPRING_PROFILES_ACTIVE: docker
-      RabbitMQ__Host: rabbitmq
-      RabbitMQ__Username: ${RABBITMQ_USER:-cashflow}
-      RabbitMQ__Password: ${RABBITMQ_PASS:-cashflow_pass}
-      REDIT_HOST: redis
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USERNAME: ${RABBITMQ_USER:-cashflow}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASS:-cashflow_pass}
+      REDIS_HOST: redis
     ports:
       - "5001:5001"
     depends_on:
